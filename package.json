@@ -1,6 +1,6 @@
 {
   "name": "dsh-capywarm",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "卡皮暖暖 CapyWarm — an ORIGINAL capybara emotional-support plugin for DeepSeek Harness (capy_comfort / capy_praise / capy_vibe). 原创水豚情绪陪伴插件，与任何现有水豚 IP 无关。",
   "type": "module",
   "main": "index.js",

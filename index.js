@@ -41,11 +41,12 @@ export const Config = Schema.object({
 
 /**
  * Render a bilingual line according to the configured language.
+ * Exported for tests (pure function).
  * @param {CapyWarmConfig} config
  * @param {{zh: string, en: string}} line
  * @returns {string}
  */
-function renderLine(config, line) {
+export function renderLine(config, line) {
   if (config.language === 'zh') return line.zh
   if (config.language === 'en') return line.en
   return `${line.zh}\n${line.en}`
@@ -53,16 +54,32 @@ function renderLine(config, line) {
 
 /**
  * Compose the final tool output: header, optional art, body lines.
+ * Exported for tests (pure function).
  * @param {CapyWarmConfig} config
  * @param {string} art
  * @param {string[]} lines
  * @returns {string}
  */
-function compose(config, art, lines) {
+export function compose(config, art, lines) {
   const parts = [`🦫 ${config.characterName} · 卡皮暖暖 CapyWarm`]
   if (config.asciiArt && art) parts.push(art)
   parts.push(...lines)
   return parts.join('\n\n')
+}
+
+/**
+ * Build the vibe body line: custom lines first, then the built-in pool.
+ * Exported for tests (deterministic via `rng`).
+ * @param {CapyWarmConfig} config
+ * @param {() => number} [rng]
+ * @returns {string}
+ */
+export function vibeLine(config, rng = Math.random) {
+  const pool = [
+    ...config.customVibe.map((text) => ({ zh: text, en: text })),
+    ...VIBE,
+  ]
+  return renderLine(config, pick(pool, rng))
 }
 
 /**
@@ -146,13 +163,7 @@ export function apply(ctx, config) {
       render: (_args, value) => [{ type: 'text', text: value }],
     },
     async execute() {
-      const lines = []
-      if (config.customVibe.length > 0 && Math.random() < 0.5) {
-        lines.push(pick(config.customVibe))
-      } else {
-        lines.push(renderLine(config, pick(VIBE)))
-      }
-      return compose(config, ART.calm, lines)
+      return compose(config, ART.calm, [vibeLine(config)])
     },
   }))
 

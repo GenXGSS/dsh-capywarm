@@ -4,6 +4,7 @@
 
 > 🦫 慢慢来，比较快。/ Slow is smooth, smooth is fast.
 
+[![CI](https://github.com/GenXGSS/dsh-capywarm/actions/workflows/ci.yml/badge.svg)](https://github.com/GenXGSS/dsh-capywarm/actions/workflows/ci.yml)
 [![license](https://img.shields.io/badge/license-MIT-green.svg)](./LICENSE)
 
 ## 功能 / Features
@@ -56,10 +57,32 @@ The character, all dialogue lines and the ASCII art are original works by this p
 
 纯 ESM JavaScript，无构建步骤：`index.js` 为 Cordis 插件入口（`name` / `Config` / `apply`），`cordis.patch.yml` 为 bundle 层（`package.json#dsh.bundle.patch` 指向它）。修改后直接发布即可，npm 分发的是预构建代码，用户无需 allowBuilds 授权。
 
+## 开发与测试 / Development & testing
+
+单元测试零依赖（Node 内置 test runner + 模块钩子 mock 两个 DSH peer 包），覆盖工具注册契约、参数处理、语言渲染、自定义台词与 mood 归一化：
+
+```sh
+node --test --import ./test/mocks/register.mjs "test/*.test.mjs"
+```
+
+CI 在 Node 22 / 24 上自动运行（push 与 PR 触发），徽章见文件头。
+
+### 真机冒烟清单 / Smoke checklist（需要有 DSH 的机器）
+
+单元测试无法覆盖真实 DSH 运行时，发布前请在目标机器按序确认：
+
+1. **层组合**：`dsh plugin --profile web add github:GenXGSS/dsh-capywarm` 安装后，执行 `dsh --profile web --dump-config`，输出中应出现 `# == dsh-capywarm` 层。
+2. **干净启动**：`dsh web` 启动无 `did not activate` / pending 报错（boot audit 会拦截未激活的插件行）。
+3. **端到端调用**：Web UI 里依次说三句话，确认模型调用对应工具——
+   - 「今天好累，让暖暖安慰我一下」→ 触发 `capy_comfort`（tired 档 + ASCII）
+   - 「我们刚修好了登录 bug！」→ 触发 `capy_praise`
+   - 「来一条摸鱼语录」→ 触发 `capy_vibe`
+4. **配置生效**：在 profile 的 `cordis.patch.yml` 中覆盖 `language: en`，HMR 后英文输出。
+
 ## 发布到插件市场 / Publishing
 
 1. `npm publish`（保持公开访问）。
-2. GitHub 仓库打上 `dsh-plugin` topic 并打 `v0.1.0` tag —— 各社区注册表（dshmk.com、dshmarketplace.dev、awesome-dsh-plugin.com 等）会自动同步收录。
+2. GitHub 仓库打上 `dsh-plugin` topic 并按版本打 `vX.Y.Z` tag —— 各社区注册表（dshmk.com、dshmarketplace.dev、awesome-dsh-plugin.com 等）会自动同步收录。
 3. 如需进入官方「发现」索引，按[官方市场索引格式](https://deepseek-harness.github.io/deepseek-harness/guide/plugin-market)提交 `index.json`（可由 deepseek-harness 仓库自带的参考生成器生成）。
 
 ## License
