@@ -1,0 +1,37 @@
+{
+  "name": "dsh-capywarm",
+  "version": "0.1.0",
+  "description": "卡皮暖暖 CapyWarm — an ORIGINAL capybara emotional-support plugin for DeepSeek Harness (capy_comfort / capy_praise / capy_vibe). 原创水豚情绪陪伴插件，与任何现有水豚 IP 无关。",
+  "type": "module",
+  "main": "index.js",
+  "files": [
+    "index.js",
+    "content.js",
+    "cordis.patch.yml",
+    "icon.svg"
+  ],
+  "keywords": [
+    "dsh",
+    "dsh-plugin",
+    "deepseek-harness",
+    "capybara",
+    "emotion",
+    "comfort",
+    "wellness",
+    "pet"
+  ],
+  "license": "MIT",
+  "engines": {
+    "dsh": ">=0.2.0-rc.2"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/dsh-tools": "*",
+    "@deepseek-ai/schemastery": "*"
+  },
+  "dsh": {
+    "bundle": {
+      "patch": "./cordis.patch.yml"
+    }
+  }
+}
