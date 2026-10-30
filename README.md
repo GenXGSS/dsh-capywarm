@@ -19,12 +19,11 @@
 ## 安装 / Install
 
 ```sh
-# npm（推荐，无需构建授权 / prebuilt, no build approval needed）
-dsh plugin --profile web add dsh-capywarm
-
-# 或从 GitHub 安装
-dsh plugin --profile web add github:<your-name>/dsh-capywarm
+# 从 GitHub 安装（无需构建授权 / no build approval needed）
+dsh plugin --profile web add github:GenXGSS/dsh-capywarm
 ```
+
+npm 包暂未发布；如需 `dsh plugin add dsh-capywarm` 直装，可自行 `npm publish`（包名已预留：`dsh-capywarm`）。
 
 安装后重启 `dsh web` 即可。试着对模型说：
 「今天好累，让暖暖安慰我一下」 / "I'm exhausted, ask the capybara to comfort me."
